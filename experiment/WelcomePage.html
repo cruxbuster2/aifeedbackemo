@@ -1,0 +1,23 @@
+{% extends "global/Page.html" %}
+{% block title %}Welcome to the Alternative Uses Experiment{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h4>Welcome!</h4>
+        <p>Thank you for participating in our experiment. Here's what you need to know:</p>
+        
+        <ul>
+            <li>This experiment will take approximately 30 minutes to complete.</li>
+            <li>You will receive a base payment of {{ Constants.participation_fee }}.</li>
+            <li>You can earn up to an additional {{ Constants.max_bonus }} bonus based on your performance.</li>
+            <li>You will be asked to complete a creative task and provide some demographic information.</li>
+            <li>All responses will be kept confidential and used only for research purposes.</li>
+        </ul>
+
+        <p>By clicking "Next", you agree to participate in this study.</p>
+    </div>
+</div>
+
+{% next_button %}
+{% endblock %}

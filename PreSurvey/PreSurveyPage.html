@@ -1,0 +1,101 @@
+{% extends "global/Page.html" %}
+{% block title %}
+    {{ page_title }}
+{% endblock %}
+
+{% block content %}
+<style>
+    .progress-bar {
+        background-color: #4CAF50;
+        height: 100%;
+        width: {{ progress }};
+    }
+    .form-group {
+        margin-bottom: 2rem;
+    }
+    .field-label {
+        display: block;
+        margin-bottom: 1rem;
+        font-weight: 500;
+    }
+    .radio-options {
+        display: flex;
+        justify-content: flex-start;
+        gap: 2rem;
+        margin-top: 0.5rem;
+        padding-left: 0;
+        max-width: 400px;
+    }
+    .number-input {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 0.5rem;
+    }
+    .scale-labels {
+        display: flex;
+        justify-content: space-between;
+        max-width: 400px;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+        color: #666;
+    }
+    .number-scale-labels {
+        display: flex;
+        justify-content: flex-start;
+        gap: 2rem;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+        color: #666;
+    }
+</style>
+
+<div class="container" style="max-width: 1000px; margin: 0 auto; padding: 20px;">
+    <div class="card" style="background-color: #f8f9fa; border-radius: 8px; padding: 30px;">
+        <div class="survey-form">
+            {% for field in form %}
+            <div class="form-group">
+                <label class="field-label">{{ field.label }}</label>
+                
+                {% if 'pref_innovation' in field.name or 'feedback_utility' or 'ai_' in field.name %}
+                    <div class="scale-labels">
+                        <span>1 = Strongly Disagree</span>
+                        <span>5 = Strongly Agree</span>
+                    </div>
+                    <div class="radio-options">
+                        {{ field }}
+                    </div>
+                {% else %}
+                    <div class="number-scale-labels">
+                        <span>1 = Low</span>
+                        <span>10 = High</span>
+                    </div>
+                    <div class="number-input">
+                        {{ field }}
+                    </div>
+                {% endif %}
+
+                {% if field.errors %}
+                    <div class="alert alert-danger" style="color: red; margin-top: 5px;">
+                        {{ field.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        {{ next_button }}
+
+        <div class="progress-section" style="margin-top: 20px;">
+            <div class="progress" style="background-color: #eee; height: 10px; border-radius: 5px; overflow: hidden;">
+                <div class="progress-bar"></div>
+            </div>
+            <div style="text-align: center; color: #666; margin-top: 10px;">
+                Progress: {{ progress }}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

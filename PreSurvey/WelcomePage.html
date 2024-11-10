@@ -1,0 +1,24 @@
+{% extends "global/Page.html" %}
+{% block title %}Welcome to the Alternative Uses Experiment{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h4>Welcome!</h4>
+        <p>Thank you for participating in our experiment. Here's what you need to know:</p>
+        
+        <ul>
+            <li>This study has two parts: this survey and a laboratory task.</li>
+            <li>This survey will take approximately 10 minutes to complete.</li>
+            <li>The survey will ask you to provide some demographic information and your thoughts and opinions on a number of statements.</li>
+            <li>The laboratory task will ask you to read a prompt and provide a creative response.</li>
+            <li>You will be compensated for the laboratory task but you must complete this survey in order to participate in the laboratory task.</li>
+            <li>All responses will be kept confidential and used only for research purposes.</li>
+        </ul>
+
+        <p>By clicking "Next", you agree to participate in this study.</p>
+    </div>
+</div>
+
+{% next_button %}
+{% endblock %}

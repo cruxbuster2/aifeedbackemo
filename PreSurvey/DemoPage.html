@@ -1,0 +1,22 @@
+{% extends "global/Page.html" %}
+{% block title %}Demographic Information{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <p>Please provide some information about yourself. This will help us understand our participant pool better.</p>
+        
+        {% for field in form %}
+            <div class="form-group">
+                <label>{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="alert alert-danger">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% next_button %}
+{% endblock %}

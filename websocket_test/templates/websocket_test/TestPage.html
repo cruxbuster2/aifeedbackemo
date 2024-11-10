@@ -1,0 +1,31 @@
+{% extends "global/Page.html" %}
+{% block content %}
+<button id="testButton">Test WebSocket</button>
+<div id="feedbackDisplay"></div>
+
+<script>
+    // Wait for DOMContentLoaded to ensure everything is ready
+    window.addEventListener('DOMContentLoaded', (event) => {
+        console.log("DOM fully loaded for WebSocket test");
+
+        // Function to test liveSend
+        function testWebSocket(event) {
+            event.preventDefault();  // Prevent any form submission or default behavior
+            console.log("Testing liveSend...");
+            liveSend({ message: "test" });
+        }
+
+        // Set up liveRecv to display feedback
+        liveRecv((data) => {
+            console.log("Data received in liveRecv:", data);
+            if (data.feedback) {
+                document.getElementById("feedbackDisplay").innerText = data.feedback;
+            }
+        });
+
+        // Attach the click event to the button
+        document.getElementById("testButton").addEventListener("click", testWebSocket);
+    });
+</script>
+{% endblock %}
+

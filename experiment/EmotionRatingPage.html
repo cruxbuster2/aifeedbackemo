@@ -1,0 +1,67 @@
+{% extends "global/Page.html" %}
+{% block title %}How Did This Task Make You Feel?{% endblock %}
+
+{% block content %}
+<div style="max-width: 1800px; margin: 0 auto; padding: 20px;">
+    <div style="background-color: #f8f9fa; border-radius: 8px; padding: 30px;">
+        <div style="margin-bottom: 40px;">
+            <label for="arousal" style="display: block; margin-bottom: 15px; font-weight: 500;">
+                How energetic or calm do you feel?
+            </label>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span style="width: 80px; text-align: right;">Very Calm</span>
+                <input type="range" 
+                       id="arousal" 
+                       name="arousal" 
+                       min="0" 
+                       max="100" 
+                       step="0.1"
+                       style="flex-grow: 1;"
+                       required>
+                <span style="width: 80px;">Very Energetic</span>
+            </div>
+            <div id="arousal-value" style="text-align: center; margin-top: 10px; color: #666;">50</div>
+        </div>
+
+        <div style="margin-bottom: 40px;">
+            <label for="valence" style="display: block; margin-bottom: 15px; font-weight: 500;">
+                How pleasant or unpleasant do you feel?
+            </label>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span style="width: 80px; text-align: right;">Very Unpleasant</span>
+                <input type="range" 
+                       id="valence" 
+                       name="valence" 
+                       min="0" 
+                       max="100" 
+                       step="0.1"
+                       style="flex-grow: 1;"
+                       required>
+                <span style="width: 80px;">Very Pleasant</span>
+            </div>
+            <div id="valence-value" style="text-align: center; margin-top: 10px; color: #666;">50</div>
+        </div>
+
+        {% if show_next_button %}
+            <button class="otree-btn-next btn btn-primary">Continue</button>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function updateValue(slider, outputId) {
+    const value = parseFloat(slider.value).toFixed(1);
+    document.getElementById(outputId).textContent = value;
+}
+
+document.getElementById('arousal').oninput = function() {
+    updateValue(this, 'arousal-value');
+};
+
+document.getElementById('valence').oninput = function() {
+    updateValue(this, 'valence-value');
+};
+</script>
+{% endblock %}

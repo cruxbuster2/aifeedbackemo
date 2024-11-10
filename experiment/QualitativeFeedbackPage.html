@@ -1,0 +1,16 @@
+{% extends "global/Page.html" %}
+{% block title %}Expert Feedback{% endblock %}
+
+{% block content %}
+<div style="max-width: 1800px; margin: 0 auto; padding: 20px;">
+    <div style="background-color: #f8f9fa; border-radius: 8px; padding: 30px;">
+        <h3 style="color: #2c3e50; margin-bottom: 20px;">Evaluation of Your Ideas</h3>
+        <div style="background-color: white; padding: 20px; border-radius: 4px; margin-bottom: 30px;">
+            {{ feedback }}
+        </div>
+        {% if show_next_button %}
+            <button class="otree-btn-next btn btn-primary">Continue</button>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
