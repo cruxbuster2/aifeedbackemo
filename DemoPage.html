@@ -1,0 +1,110 @@
+{% extends "global/Page.html" %}
+{% block title %}Demographic Information{% endblock %}
+{% block content %}
+
+<div class="container" style="max-width: 800px; margin: 0 auto; padding: 20px;">
+    <div class="card mb-4">
+        <div class="card-body">
+            <h4>Welcome!</h4>
+            <p>Please provide us with some demographic information. Your responses will help us better understand our study participants.</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5>Basic Information</h5>
+        </div>
+        <div class="card-body">
+            {% for field in form %}
+            {% if field.name in 'age,gender,education,occupation' %}
+            <div class="form-group mb-4">
+                <label>{{ field.label }}</label>
+                <div class="d-flex align-items-center gap-3">
+                    {{ field }}
+                </div>
+                {% if field.errors %}
+                <div class="alert alert-danger mt-1">
+                    {{ field.errors }}
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5>Language and Location</h5>
+        </div>
+        <div class="card-body">
+            {% for field in form %}
+            {% if field.name in 'countrywrite,english' %}
+            <div class="form-group mb-4">
+                <label>{{ field.label }}</label>
+                <div class="d-flex align-items-center gap-3">
+                    {{ field }}
+                </div>
+                {% if field.errors %}
+                <div class="alert alert-danger mt-1">
+                    {{ field.errors }}
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5>Vision Information</h5>
+        </div>
+        <div class="card-body">
+            {% for field in form %}
+            {% if field.name in 'glasses,contacts' %}
+            <div class="form-group mb-4">
+                <label>{{ field.label }}</label>
+                <div class="d-flex align-items-center gap-3">
+                    {{ field }}
+                </div>
+                {% if field.errors %}
+                <div class="alert alert-danger mt-1">
+                    {{ field.errors }}
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5>Work Experience</h5>
+        </div>
+        <div class="card-body">
+            {% for field in form %}
+            {% if field.name in 'work_experience' %}
+            <div class="form-group mb-4">
+                <label>{{ field.label }}</label>
+                <div class="d-flex align-items-center gap-3">
+                    {{ field }}
+                </div>
+                {% if field.errors %}
+                <div class="alert alert-danger mt-1">
+                    {{ field.errors }}
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="text-center">
+        {{ next_button }}
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,313 @@
+{% extends "global/Page.html" %}
+{% block title %}Alternative Uses for an Old Building{% endblock %}
+
+{% block content %}
+<div style="max-width: 1800px; margin: 0 auto; padding: 20px;">
+    <!-- Image Gallery -->
+    <div style="display: flex; justify-content: space-between; margin-bottom: 20px; gap: 20px; height: 180px;">
+        <div style="flex: 1; text-align: center;">
+            <img src="/static/depotphoto.png" alt="Exterior Photo" style="height: 150px; width: auto; object-fit: cover;">
+            <p style="margin: 5px 0;">Exterior Photo</p>
+        </div>
+        <div style="flex: 1; text-align: center;">
+            <img src="/static/depotplan.png" alt="Floor Plan" style="height: 150px; width: auto; object-fit: cover;">
+            <p style="margin: 5px 0;">Floor Plan</p>
+        </div>
+        <div style="flex: 1; text-align: center;">
+            <img src="/static/depotinterior.png" alt="Interior Photo" style="height: 150px; width: auto; object-fit: cover;">
+            <p style="margin: 5px 0;">Interior Photo</p>
+        </div>
+    </div>
+
+    <!-- Two Column Layout -->
+    <div style="display: flex; gap: 30px; height: calc(100vh - 150px);">
+        <!-- Left Column - Input -->
+        <div style="flex: 1;">
+            <div style="background-color: #f8f9fa; border-radius: 8px; padding: 20px; height: 100%;">
+                <h3 style="color: #2c3e50; font-size: 1.5rem; margin-bottom: 10px;">Describe Your Alternative Uses</h3>
+                <div style="height: 80px;">
+                    <p style="color: #666; margin-bottom: 5px;">Please describe your ideas for alternative uses of this building making sure to show:</p>
+                    <div style="display: flex; gap: 20px; color: #666;">
+                        <span>• Innovation</span>
+                        <span>• Feasibility</span>
+                        <span>• Completeness</span>
+                    </div>
+                </div>
+                <textarea id="alternative_use" name="alternative_use" 
+                    style="width: 100%; height: calc(100% - 100px); padding: 12px; border: 1px solid #ddd; 
+                    border-radius: 4px; background-color: white; font-size: 1rem; line-height: 1.5;"
+                    placeholder="Enter your ideas here..."
+                    oninput="updateMetricsOnType()"></textarea>
+                <form id="form">
+                    <input type="hidden" name="alternative_use" id="alternative_use_hidden">
+                    <div id="submit-button-container" style="display: none;">
+                        <button type="button" onclick="submitFinal()" class="btn btn-primary"
+                            style="width: 100%; padding: 12px; margin-top: 15px; font-size: 1rem;">
+                            Submit Final Ideas and Continue
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right Column - Metrics and Ideas -->
+        <div style="flex: 1;">
+            <div style="background-color: #f8f9fa; border-radius: 8px; padding: 20px; height: 100%;">
+                <h3 style="color: #2c3e50; font-size: 1.5rem; margin-bottom: 10px;">Writing Analytics</h3>
+                <div style="height: calc(100% - 50px); display: flex; flex-direction: column; gap: 20px;">
+                    <!-- Current Statistics Section -->
+                    <div style="background-color: white; padding: 15px; border-radius: 4px; flex: 0 0 auto;">
+                        <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+                            <div style="margin-right: 20px;">
+                                <span style="color: #666;">Time: </span>
+                                <span id="time" style="font-weight: 500;">0:00</span>
+                            </div>
+                            <div style="margin-right: 20px;">
+                                <span style="color: #666;">Keystrokes: </span>
+                                <span id="keystrokes" style="font-weight: 500;">0</span>
+                            </div>
+                            <div style="margin-right: 20px;">
+                                <span style="color: #666;">WPM: </span>
+                                <span id="wpm" style="font-weight: 500;">0.0</span>
+                            </div>
+                            <div style="margin-right: 20px;">
+                                <span style="color: #666;">Ideas: </span>
+                                <span id="ideas" style="font-weight: 500;">0</span>
+                            </div>
+                            <div>
+                                <span style="color: #666;">Removed: </span>
+                                <span id="removed" style="font-weight: 500;">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ideas List Section -->
+                    <div style="background-color: white; padding: 15px; border-radius: 4px; flex: 1;">
+                        <h4 style="color: #2c3e50; margin-bottom: 10px;">Unique Ideas:</h4>
+                        <ul id="idea-list" style="list-style: none; padding: 0; margin: 0;">
+                            <li style="color: #666;">Ideas will appear as you type...</li>
+                        </ul>
+                    </div>
+
+                    <!-- Analysis Section -->
+                    <div style="background-color: white; padding: 15px; border-radius: 4px; flex: 1;">
+                        <h4 style="color: #2c3e50; margin-bottom: 10px;">Idea Analysis:</h4>
+                        <div id="feedback-content" style="color: #666;">
+                            Analysis will appear as you write...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Keep your existing scripts section -->
+{% endblock %}
+
+{% block scripts %}
+<script>
+let startTime = Date.now();
+let previousText = "";
+let wordCount = 0;
+let keystrokeCount = 0;
+let ideasCount = 0;
+let removedCount = 0;
+let timeElapsed = 0;
+let typingTimer;
+let countdownInterval;
+let secondsLeft = 0;
+const doneTypingInterval = 1000; // Wait 1 second after typing stops
+
+// Debug logging function
+function debugLog(message, data) {
+    console.log(message, data);
+    const debugContent = document.getElementById('debug-content');
+    if (debugContent) {
+        const timestamp = new Date().toLocaleTimeString();
+        debugContent.innerHTML += `[${timestamp}] ${message}\n${JSON.stringify(data, null, 2)}\n\n`;
+    }
+}
+
+function updateTimer() {
+    const now = Date.now();
+    timeElapsed = Math.floor((now - startTime) / 1000);
+    const minutes = Math.floor(timeElapsed / 60);
+    const seconds = timeElapsed % 60;
+    document.getElementById('time').textContent = 
+        `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
+
+function updateMetricsOnType() {
+    const currentText = document.getElementById('alternative_use').value;
+    
+    // Update basic metrics
+    keystrokeCount = currentText.length;
+    document.getElementById('keystrokes').textContent = keystrokeCount;
+    
+    const words = currentText.trim().split(/\s+/);
+    wordCount = words.length;
+    const minutes = timeElapsed / 60;
+    const wpm = minutes > 0 ? (wordCount / minutes).toFixed(1) : '0.0';
+    document.getElementById('wpm').textContent = wpm;
+    
+    const sentences = currentText.split(/[.!?]+/).filter(s => s.trim().length > 0);
+    ideasCount = sentences.length;
+    document.getElementById('ideas').textContent = ideasCount;
+    
+    const previousSentences = previousText.split(/[.!?]+/).filter(s => s.trim().length > 0);
+    removedCount = previousSentences.filter(s => !currentText.includes(s)).length;
+    document.getElementById('removed').textContent = removedCount;
+    
+    // Clear existing typing timer
+    clearTimeout(typingTimer);
+    
+    // Start new typing timer
+    typingTimer = setTimeout(() => {
+        if (currentText.trim().length > 0) {
+            const data = {
+                'alternative_use': currentText,
+                'metrics': {
+                    'keystrokes': keystrokeCount,
+                    'wpm': parseFloat(wpm),
+                    'ideas': ideasCount,
+                    'removed': removedCount
+                }
+            };
+            debugLog('Sending data to server:', data);
+            liveSend(data);
+        }
+    }, doneTypingInterval);
+    
+    previousText = currentText;
+}
+
+function updateIdeaList(ideas) {
+    debugLog('Updating idea list:', ideas);
+    const ideaList = document.getElementById('idea-list');
+    if (!ideas || ideas.length === 0) {
+        ideaList.innerHTML = '<li style="color: #666;">No ideas identified yet...</li>';
+        return;
+    }
+    
+    ideaList.innerHTML = ideas.map(idea => `
+        <li style="margin-bottom: 8px; padding: 8px; 
+            background-color: #f8f9fa; border-radius: 4px; 
+            border-left: 3px solid #4CAF50;">
+            ${idea}
+        </li>
+    `).join('');
+}
+
+function submitFinal() {
+    clearInterval(countdownInterval);  // Stop the countdown if it's running
+    
+    const textarea = document.getElementById('alternative_use');
+    const hiddenInput = document.getElementById('alternative_use_hidden');
+    hiddenInput.value = textarea.value;
+    
+    const data = {
+        'alternative_use': textarea.value,
+        'final_submit': true,
+        'metrics': {
+            'keystrokes': keystrokeCount,
+            'wpm': parseFloat(document.getElementById('wpm').textContent),
+            'ideas': ideasCount,
+            'removed': removedCount
+        }
+    };
+    
+    debugLog('Sending final submission:', data);
+    liveSend(data);
+}
+
+function autoSubmit() {
+    const textarea = document.getElementById('alternative_use');
+    if (textarea.value.trim() !== '') {
+        const data = {
+            'alternative_use': textarea.value,
+            'auto_submit': true,
+            'metrics': {
+                'keystrokes': keystrokeCount,
+                'wpm': parseFloat(document.getElementById('wpm').textContent),
+                'ideas': ideasCount,
+                'removed': removedCount
+            }
+        };
+        debugLog('Auto-submitting:', data);
+        liveSend(data);
+    }
+}
+
+function liveRecv(data) {
+    debugLog('Received from server:', data);
+    
+    if (data.ideas) {
+        updateIdeaList(data.ideas);
+    }
+    
+    if (data.analysis) {
+        document.getElementById('feedback-content').innerHTML = 
+            data.analysis.split('\n').map(line => 
+                `<p style="margin-bottom: 8px;">${line}</p>`
+            ).join('');
+    }
+    
+    if (data.error) {
+        console.error("Error:", data.error);
+        document.getElementById('feedback-content').innerHTML = 
+            `<p style="color: red;">${data.error}</p>`;
+    }
+    
+    if (data.advance_page) {
+        document.getElementById('form').submit();
+    }
+}
+
+// Set up timers and auto-submissions
+function updateCountdown() {
+    if (secondsLeft <= 30) {  // Show countdown for last 30 seconds
+        const button = document.querySelector('#submit-button-container button');
+        if (button) {
+            button.innerHTML = `Submit Final Ideas and Continue (${secondsLeft}s remaining)`;
+        }
+    }
+    secondsLeft--;
+    
+    if (secondsLeft < 0) {
+        clearInterval(countdownInterval);
+    }
+}
+
+// Updated window.onload with countdown
+window.onload = function() {
+    // Start timer updates
+    setInterval(updateTimer, 1000);
+    
+    // First auto-submission at 30 seconds
+    setTimeout(autoSubmit, 30000);
+    
+    // Show submit button at 1.5 minutes
+    setTimeout(() => {
+        document.getElementById('submit-button-container').style.display = 'block';
+        // Start countdown from 60 seconds
+        secondsLeft = 30;
+        countdownInterval = setInterval(updateCountdown, 1000);
+    }, 90000);
+    
+    // Auto-submit at 2 minutes
+    setTimeout(() => {
+        if (document.getElementById('alternative_use').value.trim() !== '') {
+            // Add a final warning message
+            const feedback = document.getElementById('feedback-content');
+            if (feedback) {
+                feedback.innerHTML = '<p style="color: red;">Time limit reached. Submitting automatically...</p>';
+            }
+            setTimeout(() => submitFinal(), 1000); // Small delay to show the message
+        }
+    }, 120000);
+    
+    debugLog('Page initialized', { startTime: new Date().toISOString() });
+};
+</script>
+{% endblock %}

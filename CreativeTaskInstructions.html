@@ -1,0 +1,84 @@
+{% extends "global/Page.html" %}
+{% block title %}Creative Task Instructions{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px; margin: 0 auto; padding: 20px;">
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5>Next Up: Creative Writing Task</h5>
+        </div>
+        <div class="card-body">
+            <h6 class="mb-4">What to Expect</h6>
+            <p class="mb-4">
+                You are about to begin the creative portion of this study. On the next screen, you will:
+            </p>
+            <ul class="mb-4">
+                <li class="mb-2">See a prompt asking for your ideas</li>
+                <li class="mb-2">Have <strong>seven minutes</strong> to develop a detailed response</li>
+                <li class="mb-2">Type your response in the text area on the left side of the screen</li>
+                <li class="mb-2">See real-time feedback and metrics on the right side</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5>Important Guidelines</h5>
+        </div>
+        <div class="card-body">
+            <div class="mb-4">
+                <h6 class="mb-3">Writing Your Response:</h6>
+                <ul class="mb-3">
+                    <li class="mb-2">Take time to develop your ideas thoroughly</li>
+                    <li class="mb-2">Write in complete, well-structured sentences</li>
+                    <li class="mb-2">Consider multiple aspects and possibilities</li>
+                    <li class="mb-2">Be as detailed and specific as possible</li>
+                </ul>
+            </div>
+
+            <div class="mb-4">
+                <h6 class="mb-3">Real-Time Metrics:</h6>
+                <ul class="mb-3">
+                    <li class="mb-2">The right panel will display metrics about your response</li>
+                    <li class="mb-2">These measures track both productivity and quality</li>
+                    <li class="mb-2">The metrics will be part of your final evaluation</li>
+                </ul>
+            </div>
+
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle me-2"></i>
+                You will receive a warning when one minute remains, giving you time to finalize your thoughts before submission.
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5>Ready to Begin?</h5>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                When you click 'Next', you will begin the 7-minute creative task. Make sure you are ready to start before proceeding.
+            </p>
+            <div class="text-center">
+                {{ next_button }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    ul {
+        padding-left: 1.5rem;
+    }
+    li {
+        line-height: 1.6;
+    }
+    .card {
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .alert {
+        border-left: 4px solid #0dcaf0;
+    }
+</style>
+{% endblock %}

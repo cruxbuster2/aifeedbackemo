@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alternative Uses for Building</title>
+    <style>
+        /* Basic styles */
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #responseBox { width: 100%; height: 150px; padding: 10px; }
+        #feedback { height: 100px; margin-top: 20px; border: 1px solid #ccc; padding: 10px; }
+        .button { margin-top: 10px; padding: 10px 20px; cursor: pointer; }
+        .chat-window { margin-top: 20px; border: 1px solid #ccc; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Alternative Uses for an Old Building</h1>
+    <p>Enter your ideas for alternative uses of an old building below:</p>
+    
+    <textarea id="responseBox" placeholder="Type your ideas here..."></textarea>
+    <br>
+    <button class="button" onclick="submitResponse()">Submit</button>
+
+    <div id="feedback" class="chat-window">
+        <h3>ChatGPT Feedback</h3>
+        <p id="chatFeedback">Awaiting feedback...</p>
+    </div>
+
+    <script>
+        async function submitResponse() {
+            const responseText = document.getElementById("responseBox").value;
+            document.getElementById("chatFeedback").innerHTML = "Processing...";
+
+            const response = await fetch("/submit-response", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ response: responseText })
+            });
+
+            const data = await response.json();
+            document.getElementById("chatFeedback").innerHTML = data.feedback;
+        }
+    </script>
+</body>
+</html>
