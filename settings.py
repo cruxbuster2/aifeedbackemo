@@ -21,10 +21,12 @@ SESSION_CONFIG_DEFAULTS = dict(
 
 INSTALLED_APPS = [
     'otree',
+    'django.contrib.staticfiles',
     'experiment',
     'PreSurvey',
 ]
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
 # Basic settings
 ADMIN_USERNAME = 'admin'
 ADMIN_PASSWORD = environ.get('OTREE_ADMIN_PASSWORD', 'changeme')
