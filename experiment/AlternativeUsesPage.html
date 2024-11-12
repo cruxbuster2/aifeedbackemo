@@ -293,9 +293,9 @@ window.onload = function() {
         // Start countdown from 60 seconds
         secondsLeft = 30;
         countdownInterval = setInterval(updateCountdown, 1000);
-    }, 90000);
+    }, 390000);
     
-    // Auto-submit at 2 minutes
+    // Auto-submit at 7 minutes
     setTimeout(() => {
         if (document.getElementById('alternative_use').value.trim() !== '') {
             // Add a final warning message
@@ -305,7 +305,7 @@ window.onload = function() {
             }
             setTimeout(() => submitFinal(), 1000); // Small delay to show the message
         }
-    }, 120000);
+    }, 420000);
     
     debugLog('Page initialized', { startTime: new Date().toISOString() });
 };
